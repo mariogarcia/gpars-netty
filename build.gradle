@@ -1,0 +1,29 @@
+
+apply plugin:'java'
+apply plugin:'groovy'      
+
+repositories{
+	mavenCentral()
+}
+
+dependencies {                                                                                                                          
+
+ /* Groovy dependencies */
+	groovy "org.codehaus.groovy:groovy-all:2.0.5"
+	compile "org.codehaus.groovy:groovy-all:2.0.5"
+	compile "org.codehaus.gpars:gpars:1.0.0"
+	compile 'io.netty:netty-all:4.0.0.CR1'
+
+ /* For testing Spock...what else? */
+	compile "org.spockframework:spock-core:0.7-groovy-2.0"
+	compile "com.googlecode.gbench:gbench:0.3.1-groovy-2.0"
+
+}
+
+task "blocking-netty-handler"(type: JavaExec){
+	description = "Executing a Netty blocking handler using a GPars actor" 
+	group = "Netty-GPars" 
+
+	classpath = sourceSets.main.runtimeClasspath
+	main = "nettygpars.npars.NettyBlockingExample"
+}
