@@ -7,6 +7,7 @@ import io.netty.bootstrap.ServerBootstrap
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 
+import io.netty.channel.ChannelOption
 import io.netty.channel.ChannelInitializer
 
 import io.netty.channel.nio.NioEventLoopGroup
@@ -35,14 +36,14 @@ class NettyBlockingExample{
 	 /* Building the channel factory */
 		def server = new ServerBootstrap().
 			group(new NioEventLoopGroup(),new NioEventLoopGroup()).
-			channel().
-			addLast("decoder",new StringDecoder()).
-			addLast("encoder",new StringEncoder()).
+			channel(NioServerSocketChannel.class).
 			childHandler(new MyChannelInitializer()).
-			setOption("child.tcpNoDelay",true).
-			setOption("child.keepAlive",true)
+			option(ChannelOption.TCP_NODELAY,true).
+			option(ChannelOption.SO_KEEPALIVE,true)
 	 /* Starting up the server */
-		def future = server.bind(new InetSocketAddress(8080)).sync()
+		def future = 
+			server.bind(new InetSocketAddress(8080)).sync()
+
 		future.channel().closeFuture().sync()
 	}
 
